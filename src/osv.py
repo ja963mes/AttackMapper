@@ -1,5 +1,6 @@
 import json
 import urllib.request
+import urllib.error
 
 def extract_ids(response):
     id_list = []
@@ -25,5 +26,16 @@ def fetch_osv(name, version):
     with urllib.request.urlopen(request, timeout=30) as response:
         return json.load(response)
 
+def fetch_vuln(vuln_id):
+    url = "https://api.osv.dev/v1/vulns/"+vuln_id
+    try:
+        with urllib.request.urlopen(url, timeout=30) as response:
+            return json.load(response)
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            return None
+        raise                
+
 def query_osv(name, version):
     return extract_ids(fetch_osv(name, version))
+
