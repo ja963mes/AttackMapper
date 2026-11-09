@@ -39,3 +39,5 @@ def fetch_vuln(vuln_id):
 def query_osv(name, version):
     return extract_ids(fetch_osv(name, version))
 
+def extract_cwes(record):
+    return record.get("database_specific", {}).get("cwe_ids", [])
